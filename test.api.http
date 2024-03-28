@@ -1,0 +1,61 @@
+#VARIABLES
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTcwZjhlZjBkYjhiMDkwMzgzMjk3YmEiLCJpYXQiOjE3MDIwNTY4OTUsImV4cCI6MTcwMjA2MDQ5NX0.S3FN64HS18eQURe4u2s6jXdf5kdk0zo0qc28zq1I_iA
+
+#Login
+POST http://localhost:3000/api/fithub/users/login
+Content-Type: application/json
+
+{
+  "email": "torien1227@gmail.com",
+  "motdepasse": "123456"
+}
+
+
+### IL FAUT METTRE 3 ### ENTRE CHAQUE REQUETTE
+# Add User
+POST http://localhost:3000/api/fithub/users/add
+Content-Type: application/json
+
+{
+  "nom": "John",
+  "email": "john@nodejs.com",
+  "motdepasse": "111111"
+}
+
+###
+# Update User
+PUT http://localhost:3000/api/fithub/users/update/6572082dcfeedbbb5120f993
+Authorization:{{token}}
+Content-Type: application/json
+
+{
+  "nom": "Jean",
+  "email": "jean@nodejs.com"
+}
+
+###
+# GET All Users
+GET http://localhost:3000/api/fithub/users
+Authorization:Bearer {{token}}
+
+###
+# GET User By id
+GET http://localhost:3000/api/fithub/users/6570f8ef0db8b090383297ba
+Authorization:Bearer {{token}}
+
+###
+# GET User By nom
+GET http://localhost:3000/api/fithub/users/name/Jean
+Authorization:Bearer {{token}}
+
+### SEND Mail
+POST http://localhost:3000/api/fithub/email/send-email
+Authorization:Bearer {{token}}
+Content-Type: application/json
+
+{
+  "to": "torien1227@gmail.com",
+  "subject": "Message From app NodeJs project",
+  "text":"Texte",//on peut utiliser soit text soit html si on utilise html ,text ne sert à rien
+  "html":"<h1>This is just a simple message to test the app.\n Don't answer please</h1>"
+}

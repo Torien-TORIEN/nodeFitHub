@@ -1,0 +1,108 @@
+### Installer  "REST Client"
+
+### IL FAUT METTRE 3 ### ENTRE CHAQUE REQUETTE
+# Add Activity
+POST http://localhost:3000/api/fithub/activities/add
+Content-Type: application/json
+
+{
+  "title": "RPM",
+  "category": "Cardio",
+  "duration": 60,
+  "intensity": "High",
+  "sportswear": "Comfortable athletic clothing and shoes",
+  "recommandations": "Stay hydrated and follow proper form",
+  "material": "Yoga mat, dumbbells",
+  "muscleTarget":"Full Body",
+  "ageMin": 18,
+  "ageMax": 60,
+  "imcMin": 18.5,
+  "imcMax": 24.9,
+  "frequencyMin": 3,
+  "frequencyMax": 5,
+  "goals": ["Strength", "Endurance"],
+  "ageGroup": ["Adult"],
+  "advantages": ["Improves cardiovascular health", "Builds muscle strength"],
+  "whoelse": ["Intermediate", "Advanced"]
+}
+
+
+###
+#Get ALL
+GET http://localhost:3000/api/fithub/activities
+Content-Type: application/json
+
+
+
+###
+#Update
+PUT http://localhost:3000/api/fithub/activities/update/65ffbe61e2facc4ae4e525f3
+Content-Type: application/json
+
+{
+  "title": "WORKOUT",
+  "category": "Fitness",
+  "duration": 60,
+  "intensity": "Low to High",
+  "sportswear": "Comfortable athletic clothing and shoes",
+  "recommandations": "Stay hydrated and follow proper form",
+  "material": "Yoga mat, dumbbells",
+  "ageMin": 18,
+  "ageMax": 40,
+  "imcMin": 30,
+  "imcMax": 40.5,
+  "frequencyMin": 3,
+  "frequencyMax": 5,
+  "goals": ["Muscle", "Endurance"],
+  "ageGroup": ["Adult","Children"],
+  "advantages": ["Improves cardiovascular health", "Builds muscle strength"],
+  "whoelse": ["Intermediate", "Advanced"]
+}
+
+
+###
+# Find By ID
+GET http://localhost:3000/api/fithub/activities/65ffbe61e2facc4ae4e525f3
+Content-Type: application/json
+
+###
+# Find By Category
+GET http://localhost:3000/api/fithub/activities/category/Fitness
+Content-Type: application/json
+
+###
+# Find By Title
+GET http://localhost:3000/api/fithub/activities/title/WORKOUT
+Content-Type: application/json
+
+###
+# Find By Imc
+GET http://localhost:3000/api/fithub/activities/imc/30
+Content-Type: application/json
+
+###
+# Find By Age
+GET http://localhost:3000/api/fithub/activities/age/41
+Content-Type: application/json
+
+###
+# Find By AgeGroup
+GET http://localhost:3000/api/fithub/activities/ageGroup/Children
+Content-Type: application/json
+
+###
+# Find By goal
+GET http://localhost:3000/api/fithub/activities/goal/Muscle
+Content-Type: application/json
+
+### 
+# Filter By Category[], Goals[],ageGroup[]
+POST http://localhost:3000/api/fithub/activities/filter
+Content-Type: application/json
+
+{
+  "category":["Fitness" , "Dance"],
+  "goals": ["Endurance","Strength"],
+  "ageGroup": ["Children"]
+}
+
