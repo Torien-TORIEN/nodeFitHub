@@ -1,25 +1,28 @@
 #VARIABLES
-@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTcwZjhlZjBkYjhiMDkwMzgzMjk3YmEiLCJpYXQiOjE3MDIwNTY4OTUsImV4cCI6MTcwMjA2MDQ5NX0.S3FN64HS18eQURe4u2s6jXdf5kdk0zo0qc28zq1I_iA
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjA1ZTExOTdhNWZmZDgxZmNjZjk0ZDUiLCJpYXQiOjE3MTE2NjMyODAsImV4cCI6MTcxMTY2Njg4MH0.LPXT9VbTWaL-UNFajKEapvWO_pP8PEwbw1-abYiniGM
 
 #Login
 POST http://localhost:3000/api/fithub/users/login
 Content-Type: application/json
 
 {
-  "email": "torien1227@gmail.com",
-  "motdepasse": "123456"
+  "email": "john.doe@example.com",
+  "password": "password123"
 }
 
 
 ### IL FAUT METTRE 3 ### ENTRE CHAQUE REQUETTE
 # Add User
-POST http://localhost:3000/api/fithub/users/add
+POST http://localhost:3000/api/fithub/users
 Content-Type: application/json
 
 {
-  "nom": "John",
-  "email": "john@nodejs.com",
-  "motdepasse": "111111"
+  "firstname": "Torien",
+  "lastname": "-",
+  "email": "torien1227@mail.com",
+  "password": "123",
+  "role": "SUPER_ADMIN",
+  "subscription": "abcdef123456"
 }
 
 ###
@@ -40,13 +43,36 @@ Authorization:Bearer {{token}}
 
 ###
 # GET User By id
-GET http://localhost:3000/api/fithub/users/6570f8ef0db8b090383297ba
+GET http://localhost:3000/api/fithub/users/6605e285a5d6c450f40f7ff9
 Authorization:Bearer {{token}}
 
 ###
-# GET User By nom
-GET http://localhost:3000/api/fithub/users/name/Jean
+# GET User By email
+GET http://localhost:3000/api/fithub/users/email/torien@mail.com
 Authorization:Bearer {{token}}
+
+###
+# GET Users By role
+GET http://localhost:3000/api/fithub/users/role/SUPER_ADMIN
+Authorization:Bearer {{token}}
+
+###
+# Deactivte account
+PUT http://localhost:3000/api/fithub/users/deactivate/6605e285a5d6c450f40f7ff9
+Authorization:Bearer {{token}}
+
+###
+# Activte account
+PUT http://localhost:3000/api/fithub/users/activate/6605e285a5d6c450f40f7ff9
+Authorization:Bearer {{token}}
+
+
+###
+# Delate account
+DELETE http://localhost:3000/api/fithub/users/6605f0cbaa3ff5d89ac3ada0
+Authorization:Bearer {{token}}
+
+
 
 ### SEND Mail
 POST http://localhost:3000/api/fithub/email/send-email

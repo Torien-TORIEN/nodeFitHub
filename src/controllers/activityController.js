@@ -27,12 +27,13 @@ const updateActivity = async (req, res) => {
 
 const deleteActivity = async (req, res) => {
   const activityId = req.params.id;
+  console.log("Deleting Activity :", activityId);
   try {
     const deletedActivity = await activityService.deleteActivity(activityId);
     if (!deletedActivity) {
-      return res.status(404).json({ success: false, message: 'Activity Not Found' });
+      return res.status(404).json({ success: false, message:'Failed to delete activity',error: 'Activity Not Found' });
     }
-    res.status(204).json({ success: true, message: 'Activity deleted successfully' });
+    res.status(204).json({ success: true, data:deletedActivity, message: 'Activity deleted successfully' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message, message: 'Failed to delete activity' });
   }
@@ -52,9 +53,10 @@ const getActivityById = async (req, res) => {
   try {
     const activity = await activityService.getActivityById(activityId);
     if (!activity) {
-      return res.status(404).json({ success: false, message: 'Activity Not Found' });
+      res.status(404).json({ success: false,error: 'Activity Not Found with that id', message: 'Activity Not Found' });
+    }else{
+      res.status(200).json({ success: true, data: activity, message: 'Retrieved activity successfully' });
     }
-    res.status(200).json({ success: true, data: activity, message: 'Retrieved activity successfully' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message, message: 'Failed to retrieve activity' });
   }

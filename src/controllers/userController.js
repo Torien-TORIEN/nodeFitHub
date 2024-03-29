@@ -1,80 +1,142 @@
 const userService = require('../services/userService');
 
-const addUser = async (req, res) => {
-  const { nom, email, motdepasse } = req.body;
+// Contrôleur pour ajouter un nouvel utilisateur
+const addUser = async (req, res, next) => {
+  //console.log(`Adding user ...`)
   try {
-    const newUser = await userService.addUser(nom, email, motdepasse);
-    res.status(201).json(newUser);
+    const user = req.body; // Supposons que les données de l'utilisateur sont envoyées dans le corps de la requête
+    const newUser = await userService.addUser(user);
+    res.status(201).json({ success: true, data:newUser, message: 'User added successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error:error.message, message: 'Failed to create an user ' });
   }
 };
 
-const updateUser = async (req, res) => {
-  const userId = req.params.id;
-  const { nom, email } = req.body;
+// Contrôleur pour mettre à jour un utilisateur existant
+const updateUser = async (req, res, next) => {
   try {
-    const updatedUser = await userService.updateUser(userId, nom, email);
-    res.status(200).json(updatedUser);
+    const userId = req.params.id; // Supposons que l'ID de l'utilisateur soit extrait des paramètres de la requête
+    const user = req.body; // Les nouvelles données de l'utilisateur à mettre à jour
+    const updatedUser = await userService.updateUser(userId, user);
+    res.status(200).json({ success: true, data:updatedUser, message: 'User updated successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error:error.message, message: 'Failed to update an user' });
   }
 };
 
-const updateUserPassword = async (req, res) => {
-  const userId = req.params.id;
-  const { newPassword } = req.body;
+// Contrôleur pour mettre à jour le mot de passe d'un utilisateur
+const updateUserPassword = async (req, res, next) => {
   try {
+    const userId = req.params.id; // Supposons que l'ID de l'utilisateur soit extrait des paramètres de la requête
+    const newPassword = req.body.password; // Le nouveau mot de passe à définir
     const updatedUser = await userService.updateUserPassword(userId, newPassword);
-    res.status(200).json(updatedUser);
+    res.json(updatedUser);
+    res.status(200).json({ success: true, data:updatedUser, message: 'User password updated successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error:error.message, message: 'Failed to update an user password' });
   }
 };
 
-const getAllUsers = async (req, res) => {
+// Contrôleur pour récupérer tous les utilisateurs
+const getAllUsers = async (req, res, next) => {
   try {
     const users = await userService.getAllUsers();
-    res.status(200).json(users);
+    res.status(200).json({ success: true, data: users, message: 'Retrieved all users successfully'});
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to retrieve users' });
   }
 };
-
-const getUserById = async (req, res) => {
-  const userId = req.params.id;
+// Contrôleur pour récupérer un utilisateur par son ID
+const getUserById = async (req, res, next) => {
   try {
+    const userId = req.params.id;
     const user = await userService.getUserById(userId);
     if (!user) {
-      return res.status(404).json({ message: 'User Not Found' });
+      return res.status(404).json({ success: false, error: 'No User  Found with that id', message: 'User Not Found' });
     }
-    res.status(200).json(user);
+    res.status(200).json({ success: true, data: user, message: 'Found user' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to find an user' });
   }
 };
 
-const getUserByNom = async (req, res) => {
-  const userNom = req.params.nom;
+// Contrôleur pour récupérer un utilisateur par son email
+const getUserByEmail = async (req, res, next) => {
   try {
-    const user = await userService.getUserByNom(userNom);
+    const email = req.params.email;
+    const user = await userService.getUserByEmail(email);
     if (!user) {
-      return res.status(404).json({ message: 'User Not Found' });
+      return res.status(404).json({ success: false, error: 'No User  Found with that email', message: 'User Not Found' });
     }
-    res.status(200).json(user);
+    res.status(200).json({ success: true, data: user, message: 'Found user' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to find an user by email' });
   }
 };
 
-const loginUser = async (req, res) => {
-  const { email, motdepasse } = req.body;
+// Contrôleur pour authentifier un utilisateur
+const loginUser = async (req, res, next) => {
   try {
-    const login = await userService.loginUser(email, motdepasse);
-    res.json(login);
+    const { email, password } = req.body;
+    const { token, user } = await userService.loginUser(email, password);
+    res.status(200).json({ success: true, user: user, token: token , message: 'Authenticated successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(404).send({error : error.message});
+    res.status(401).json({ success: false, error: error.message, message: 'Failed to log in' });
+  }
+};
+
+// Contrôleur pour récupérer les utilisateurs par rôle
+const getUserByRole = async (req, res, next) => {
+  try {
+    const role = req.params.role; // Supposons que le rôle est passé en tant que paramètre dans l'URL
+    const users = await userService.getUserByRole(role);
+    res.status(200).json({ success: true, data: users, message: 'Retrieved users by role successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to retrieve users by role' });
+  }
+};
+
+// Contrôleur pour supprimer un utilisateur (soft delete)
+const deleteUser = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const deletedUser = await userService.deleteUser(userId);
+    res.status(200).json({ success: true, data: deletedUser, message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to delete user' });
+  }
+};
+
+// Contrôleur pour désactiver un compte utilisateur
+const deactivateAccount = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const deactivatedUser = await userService.deactivateAccount(userId);
+    res.status(200).json({ success: true, data: deactivatedUser, message: 'Account deactivated successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to deactivate account' });
+  }
+};
+
+// Contrôleur pour désactiver un compte utilisateur
+const activateAccount = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const deactivatedUser = await userService.activateAccount(userId);
+    res.status(200).json({ success: true, data: deactivatedUser, message: 'Account activated successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to activate account' });
+  }
+};
+
+// Contrôleur pour déconnecter un utilisateur
+const disconnectUser = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const disconnectedUser = await userService.disconnectUser(userId);
+    res.status(200).json({ success: true, data: disconnectedUser, message: 'User disconnected successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to disconnect user' });
   }
 };
 
@@ -84,6 +146,11 @@ module.exports = {
   updateUserPassword,
   getAllUsers,
   getUserById,
-  getUserByNom,
+  getUserByEmail,
   loginUser,
+  getUserByRole,
+  deleteUser,
+  deactivateAccount,
+  activateAccount,
+  disconnectUser
 };
