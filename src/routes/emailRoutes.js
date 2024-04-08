@@ -9,7 +9,7 @@ const validationMiddleware = require('../middleware/validationMiddleware');
 // Création du routeur
 const router = express.Router();
 
-router.post('/send-email', authMiddleware, emailController.sendMail);
+router.post('/send-email',/* authMiddleware,*/ emailController.sendMail);
 // Ajoutez d'autres routes au besoin
 
 // Exportation du routeur

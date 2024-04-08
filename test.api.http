@@ -1,13 +1,13 @@
 #VARIABLES
-@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjA1ZTExOTdhNWZmZDgxZmNjZjk0ZDUiLCJpYXQiOjE3MTE2NjMyODAsImV4cCI6MTcxMTY2Njg4MH0.LPXT9VbTWaL-UNFajKEapvWO_pP8PEwbw1-abYiniGM
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjA3Y2Y1MWY3NjQ4NDU3OGJhZjc4ZWMiLCJpYXQiOjE3MTE4MDk1ODUsImV4cCI6MTcxMTgxMzE4NX0.jhITmqT4n2g4oQjYgQphyD-e8pz5fzvfhnU36a3Hzv4
 
 #Login
 POST http://localhost:3000/api/fithub/users/login
 Content-Type: application/json
 
 {
-  "email": "john.doe@example.com",
-  "password": "password123"
+  "email": "torien1227@gmail.com",
+  "password": "123"
 }
 
 
@@ -27,13 +27,12 @@ Content-Type: application/json
 
 ###
 # Update User
-PUT http://localhost:3000/api/fithub/users/update/6572082dcfeedbbb5120f993
-Authorization:{{token}}
+PUT http://localhost:3000/api/fithub/users/update/6607cf51f76484578baf78ec
+Authorization:Bearer {{token}}
 Content-Type: application/json
 
 {
-  "nom": "Jean",
-  "email": "jean@nodejs.com"
+  "email": "torien1227@gmail.com"
 }
 
 ###
@@ -43,7 +42,7 @@ Authorization:Bearer {{token}}
 
 ###
 # GET User By id
-GET http://localhost:3000/api/fithub/users/6605e285a5d6c450f40f7ff9
+GET http://localhost:3000/api/fithub/users/6607cf51f76484578baf78ec
 Authorization:Bearer {{token}}
 
 ###
@@ -72,16 +71,19 @@ Authorization:Bearer {{token}}
 DELETE http://localhost:3000/api/fithub/users/6605f0cbaa3ff5d89ac3ada0
 Authorization:Bearer {{token}}
 
+###
+# Disconnect account
+PUT http://localhost:3000/api/fithub/users/disconnect/6607cf51f76484578baf78ec
+Authorization:Bearer {{token}}
 
 
 ### SEND Mail
 POST http://localhost:3000/api/fithub/email/send-email
-Authorization:Bearer {{token}}
 Content-Type: application/json
 
 {
   "to": "torien1227@gmail.com",
   "subject": "Message From app NodeJs project",
-  "text":"Texte",//on peut utiliser soit text soit html si on utilise html ,text ne sert à rien
+  "text":"Texte",
   "html":"<h1>This is just a simple message to test the app.\n Don't answer please</h1>"
 }

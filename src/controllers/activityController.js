@@ -15,6 +15,7 @@ const updateActivity = async (req, res) => {
   const activityId = req.params.id;
   const updatedActivityData = req.body;
   try {
+    console.log("Updating activity :",activityId)
     const updatedActivity = await activityService.updateActivity(activityId, updatedActivityData);
     if (!updatedActivity) {
       return res.status(404).json({ success: false, message: 'Activity Not Found' });

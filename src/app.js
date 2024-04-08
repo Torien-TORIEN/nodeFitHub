@@ -17,8 +17,13 @@ dotenv.config();
 const app = express();
 
 // Middleware pour analyser le corps des requêtes
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+//Taille de payload par defaut : 100KB
+/*app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));*/
+
+// Augmentez la limite de taille de la charge utile
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 // Middleware pour gérer les requêtes CORS
 app.use(cors());

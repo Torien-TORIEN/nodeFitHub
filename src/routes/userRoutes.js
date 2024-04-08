@@ -22,12 +22,17 @@ router.post('/', /*validationMiddleware,*/userController.addUser);
 router.put('/update/:id',authMiddleware, userController.updateUser);
 router.get('/', authMiddleware, userController.getAllUsers);
 router.get('/:id', authMiddleware, userController.getUserById);
-router.get('/email/:email', authMiddleware, userController.getUserByEmail);
+router.get('/email/:email', userController.getUserByEmail);
 router.get('/role/:role', authMiddleware, userController.getUserByRole);
-router.put('/disconnect/:id', authMiddleware, userController.disconnectUser);
+router.put('/disconnect/:id', userController.disconnectUser);
 router.put('/deactivate/:id', authMiddleware, userController.deactivateAccount);
 router.put('/activate/:id', authMiddleware, userController.activateAccount);
 router.delete('/:id', authMiddleware, userController.deleteUser);
+router.put('/addactivity', authMiddleware, userController.addActivity);
+router.put('/removeactivity', authMiddleware, userController.removeActivity);
+router.put('/subscribe', authMiddleware, userController.subscribe);
+router.put('/unsubcribe/:userId', authMiddleware, userController.unsubscribe);
+router.get('/activities/:id', authMiddleware, userController.getUserActivities);
 // Ajoutez d'autres routes au besoin
 
 // Exportation du routeur

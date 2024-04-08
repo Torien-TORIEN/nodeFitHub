@@ -8,6 +8,10 @@ const activitySchema = new mongoose.Schema({
     required: true,
     unique:true,
   },
+  image: {
+    type: String,//id de mon abonnement
+    default:""
+  },
   category: {
     type: String,
     required: true,

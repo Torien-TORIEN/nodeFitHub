@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
+const Activity = require('../models/activityModel');
 
 const addUser = async (user) => {
   try {
@@ -57,7 +58,7 @@ const getUserByEmail = async (email) => {
 const loginUser = async (email, password) => {
   try {
     const user = await User.findOne({ email });
-    console.log(`user :${user }`)
+    //console.log(`user :${user }`)
     if (!user) {
       throw new Error('No user found with that email.');
     }
@@ -120,6 +121,71 @@ const getUserByRole = async (role) => {
   }
 };
 
+// Ajouter une activité à l'utilisateur
+const addUserActivity = async (activityId, userId) => {
+  try {
+    const user = await User.findById(userId);
+    if (user.myActivities.includes(activityId)) {
+      throw new Error('Activity already added .');
+    }
+    if (user.myActivities.length >= 3) {
+      throw new Error('Maximum number of activities reached.');
+    }
+    user.myActivities.push(activityId);
+    return await user.save();
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Supprimer une activité de l'utilisateur
+const removeUserActivity = async (activityId, userId) => {
+  try {
+    const user = await User.findById(userId);
+    user.myActivities = user.myActivities.filter(activity => activity !== activityId);
+    return await user.save();
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Abonner l'utilisateur à une offre spécifique
+const subscribe = async (offerId, userId) => {
+  try {
+    const user = await User.findById(userId);
+    user.subscription = offerId;
+    return await user.save();
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Désabonner l'utilisateur
+const unsubscribe = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    user.subscription = null;
+    return await user.save();
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getUserActivities = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('User not found.');
+    }
+    // Récupérer les détails des activités de l'utilisateur à partir de leurs identifiants
+    const activities = await Activity.find({ _id: { $in: user.myActivities } });
+    return activities;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   addUser,
   updateUser,
@@ -132,7 +198,13 @@ module.exports = {
   deactivateAccount,
   disconnectUser,
   getUserByRole,
-  activateAccount
+  activateAccount,
+  addUserActivity,
+  removeUserActivity,
+  subscribe,
+  unsubscribe,
+  getUserActivities
+
 };
 
 

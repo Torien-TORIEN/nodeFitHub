@@ -22,12 +22,31 @@ const emailFormatValidator = function (value) {
 
 // Schéma du modèle utilisateur
 const userSchema = new mongoose.Schema({
+  picture: {
+    type: String,
+  },
+  dateofbirth:{
+    type:Date,
+    required:true
+  },
+  address:{
+    type:String,
+    required:true
+  },
   firstname: {
     type: String,
     required: true,
   },
   lastname: {
     type: String,
+    required: true,
+  },
+  height: {
+    type: Number,
+    required: true,
+  },
+  weight: {
+    type: Number,
     required: true,
   },
   email: {
@@ -48,8 +67,14 @@ const userSchema = new mongoose.Schema({
     enum: ['SUPER_ADMIN', 'ADMIN','CLIENT','COACH'], // Vous pouvez ajouter d'autres rôles au besoin
     default:'CLIENT',
   },
+  gender: {
+    type: String,
+    required: true,
+    enum: ['MALE', 'FEMALE'], // Vous pouvez ajouter d'autres rôles au besoin
+  },
   subscription: {
     type: String,//id de mon abonnement
+    default:""
   },
   myActivities: {
     type: [String],// id de mes activités

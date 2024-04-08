@@ -50,6 +50,7 @@ const getAllUsers = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
   try {
     const userId = req.params.id;
+    console.log("get user by id ...")
     const user = await userService.getUserById(userId);
     if (!user) {
       return res.status(404).json({ success: false, error: 'No User  Found with that id', message: 'User Not Found' });
@@ -78,10 +79,11 @@ const getUserByEmail = async (req, res, next) => {
 const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    console.log("login ... ")
     const { token, user } = await userService.loginUser(email, password);
     res.status(200).json({ success: true, user: user, token: token , message: 'Authenticated successfully' });
   } catch (error) {
-    res.status(401).json({ success: false, error: error.message, message: 'Failed to log in' });
+    res.status(404).json({ success: false, error: error.message, message: 'Failed to connect' });
   }
 };
 
@@ -133,10 +135,72 @@ const activateAccount = async (req, res, next) => {
 const disconnectUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
+    console.log("disconnecting user ... ");
     const disconnectedUser = await userService.disconnectUser(userId);
     res.status(200).json({ success: true, data: disconnectedUser, message: 'User disconnected successfully' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message, message: 'Failed to disconnect user' });
+  }
+};
+
+// Contrôleur pour ajouter une activité à un utilisateur
+const addActivity = async (req, res, next) => {
+  try {
+    const { activityId, userId } = req.body;
+    console.log("adding Activity to user ...")
+    const updatedUser = await userService.addUserActivity(activityId, userId);
+    res.status(200).json({ success: true, data: updatedUser, message: 'Activity added successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to add activity to user' });
+  }
+};
+
+// Contrôleur pour supprimer une activité d'un utilisateur
+const removeActivity = async (req, res, next) => {
+  try {
+    console.log("removing Activity from user ...")
+    const { activityId, userId } = req.body;
+    const updatedUser = await userService.removeUserActivity(activityId, userId);
+    res.status(200).json({ success: true, data: updatedUser, message: 'Activity removed successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to remove activity from user' });
+  }
+};
+
+// Contrôleur pour abonner un utilisateur à une offre
+const subscribe = async (req, res, next) => {
+  try {
+    const { offerId, userId } = req.body;
+    console.log("subscribing ...")
+    const updatedUser = await userService.subscribe(offerId, userId);
+    res.status(200).json({ success: true, data: updatedUser, message: 'User subscribed successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to subscribe user to offer' });
+  }
+};
+
+// Contrôleur pour désabonner un utilisateur
+const unsubscribe = async (req, res, next) => {
+  try {
+    const { userId } = req.params.userId;
+    console.log("unsubscribing ...")
+    const updatedUser = await userService.unsubscribe(userId);
+    res.status(200).json({ success: true, data: updatedUser, message: 'User unsubscribed successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to unsubscribe user' });
+  }
+};
+
+// Contrôleur pour récupérer les activités d'un utilisateur
+const getUserActivities = async (req, res, next) => {
+  try {
+    const userId = req.params.id; // Supposons que l'ID de l'utilisateur soit extrait des paramètres de la requête
+    console.log("Get user activities ...")
+    const activities = await userService.getUserActivities(userId);
+    res.status(200).json({ success: true, data: activities, message: 'Retrieved user activities successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to retrieve user activities' });
+    console.log("Get user activities error :"+ error.message)
   }
 };
 
@@ -152,5 +216,10 @@ module.exports = {
   deleteUser,
   deactivateAccount,
   activateAccount,
-  disconnectUser
+  disconnectUser,
+  addActivity,
+  removeActivity,
+  subscribe,
+  unsubscribe,
+  getUserActivities,
 };
