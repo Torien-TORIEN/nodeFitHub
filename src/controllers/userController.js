@@ -29,8 +29,8 @@ const updateUserPassword = async (req, res, next) => {
   try {
     const userId = req.params.id; // Supposons que l'ID de l'utilisateur soit extrait des paramètres de la requête
     const newPassword = req.body.password; // Le nouveau mot de passe à définir
+    //console.log("Updating password :",userId, " et pwd =",newPassword)
     const updatedUser = await userService.updateUserPassword(userId, newPassword);
-    res.json(updatedUser);
     res.status(200).json({ success: true, data:updatedUser, message: 'User password updated successfully' });
   } catch (error) {
     res.status(500).json({ success: false, error:error.message, message: 'Failed to update an user password' });
@@ -75,6 +75,20 @@ const getUserByEmail = async (req, res, next) => {
   }
 };
 
+// Contrôleur pour récupérer un utilisateur par son mot de passe haché
+const getUserByPWD = async (req, res, next) => {
+  try {
+    const {hashpassword} = req.body;
+    const user = await userService.getUserByPWD(hashpassword);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'No User  Found with that hash', message: 'User Not Found' });
+    }
+    res.status(200).json({ success: true, data: user, message: 'Found user' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, message: 'Failed to find an user by password' });
+  }
+};
+
 // Contrôleur pour authentifier un utilisateur
 const loginUser = async (req, res, next) => {
   try {
@@ -113,6 +127,7 @@ const deleteUser = async (req, res, next) => {
 const deactivateAccount = async (req, res, next) => {
   try {
     const userId = req.params.id;
+    console.log("User Id : ", id)
     const deactivatedUser = await userService.deactivateAccount(userId);
     res.status(200).json({ success: true, data: deactivatedUser, message: 'Account deactivated successfully' });
   } catch (error) {
@@ -222,4 +237,5 @@ module.exports = {
   subscribe,
   unsubscribe,
   getUserActivities,
+  getUserByPWD
 };

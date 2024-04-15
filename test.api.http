@@ -87,3 +87,12 @@ Content-Type: application/json
   "text":"Texte",
   "html":"<h1>This is just a simple message to test the app.\n Don't answer please</h1>"
 }
+
+
+### GET USER BY pwd
+POST http://localhost:3000/api/fithub/users/hashpassword-user
+Content-Type: application/json
+
+{
+  "hashpassword" :"$2b$10$IZRIpJOQcLGbmmv1AD47hezCOxjNYSSprUOyk/8v5X6f6cnFB/RCC"
+}

@@ -20,9 +20,10 @@ const router = express.Router();
 router.post('/login',userController.loginUser)
 router.post('/', /*validationMiddleware,*/userController.addUser);
 router.put('/update/:id',authMiddleware, userController.updateUser);
+router.put('/update-password/:id', userController.updateUserPassword);
 router.get('/', authMiddleware, userController.getAllUsers);
-router.get('/:id', authMiddleware, userController.getUserById);
 router.get('/email/:email', userController.getUserByEmail);
+router.post('/hashpassword-user', userController.getUserByPWD);
 router.get('/role/:role', authMiddleware, userController.getUserByRole);
 router.put('/disconnect/:id', userController.disconnectUser);
 router.put('/deactivate/:id', authMiddleware, userController.deactivateAccount);
@@ -33,6 +34,9 @@ router.put('/removeactivity', authMiddleware, userController.removeActivity);
 router.put('/subscribe', authMiddleware, userController.subscribe);
 router.put('/unsubcribe/:userId', authMiddleware, userController.unsubscribe);
 router.get('/activities/:id', authMiddleware, userController.getUserActivities);
+
+// à la find
+router.get('/:id', authMiddleware, userController.getUserById);
 // Ajoutez d'autres routes au besoin
 
 // Exportation du routeur

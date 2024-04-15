@@ -55,6 +55,16 @@ const getUserByEmail = async (email) => {
   }
 };
 
+const getUserByPWD = async (hashPwd) => {
+  try {
+    return await User.findOne({ password:hashPwd ,isDeleted :false , isDeactivated : false });
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
 const loginUser = async (email, password) => {
   try {
     const user = await User.findOne({ email });
@@ -203,7 +213,8 @@ module.exports = {
   removeUserActivity,
   subscribe,
   unsubscribe,
-  getUserActivities
+  getUserActivities,
+  getUserByPWD
 
 };
 
